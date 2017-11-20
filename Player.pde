@@ -3,15 +3,15 @@ class Player{
 	private int basicAttackRange=20, basicAttackDamage=1;
 	protected int x=0, y=-1, health=22;
 	protected String name, extention;
-	public String currentAction="";
+	private char currentAction;
 	
-	Player(String nameIn,String classString){//wip
+	Player(String tempname,String tempextension){//wip
 		int r=floor(random(0,14));
-		if(currentPlayersInGame>0){
+		if(player.size()>1){
 			while(true){
 				boolean found=false;
-				for(int i=0; i<currentPlayersInGame; i++){
-					if(r==player[i].y){
+				for(Player p : player){
+					if(r==p.y){
 						found=true; break;
 					}
 				}
@@ -23,31 +23,31 @@ class Player{
 			}
 		}
 		y=r;
-		currentPlayersInGame++;
 		
-		name = nameIn;
-		extention = classString;
+		name = tempname;
+		extention = tempextension;
 		
-		switch (classString){
+		switch (tempextension){
 			case "bat": sprite=loadImage("genericPlayer.png"); break;
 			case "doc": sprite=loadImage("doc.png");           break;
 			case "txt": sprite=loadImage("genericPlayer.png"); break;
 			case "json":sprite=loadImage("genericPlayer.png"); break;
 			case "zip": sprite=loadImage("genericPlayer.png"); break;
 			case "ico": sprite=loadImage("genericPlayer.png"); break;
-			default: println("invallid class [" + classString + "]");
+			default: println("invallid class [" + tempextension + "]");
 		}
-		highlightSprite = loadImage("highlightSprite.png");
 		
-		console.print(nameIn + " joined");
+		highlightSprite = loadImage("highlightSprite.png");
+		console.print(tempname + " joined");
 	}
 	
-	public void Do(String s){
-		currentAction=s;
-		switch (currentAction){
-			case "move": console.print(name+" is moving");
-			case "atk": console.print(name+" is attacking");
-		}
+	public void ClearCurrentAction(){
+		currentAction=0;
+	}
+	
+	public void Do(char c){
+		currentAction=c;
+		console.print(name + " is doing something");
 	}
 	
 	private int calculateDistanceToPoint(int xx, int yy){
@@ -114,19 +114,19 @@ class Player{
 	}
 		
 	private void drawAttack(){//wip
-		for(int i=0; i<currentEnemiesInGame; i++)
-			if(calculateDistanceToPoint(enemy[0].x, enemy[0].y)<=basicAttackRange)
-				image(highlightSprite, enemy[i].x*gridSize, enemy[i].y*gridSize);
+		for(Enemy e : enemy)
+			if(calculateDistanceToPoint(e.x, e.y)<=basicAttackRange)
+				image(highlightSprite, e.x*gridSize, e.y*gridSize);
 	}
 	
 	private boolean checkIfSquareEmpty(int xx, int yy){
-		for(int i=0; i<currentPlayersInGame; i++){
-			if(xx == player[i].x && yy == player[i].y)return false;
+		for(Player p : player){
+			if(xx == p.x && yy == p.y)return false;
 		}
-		for(int i=0; i<currentEnemiesInGame; i++){
-			if(xx == enemy[i].x && yy == enemy[i].y)return false;
+		for(Enemy e : enemy){
+			if(xx == e.x && yy == e.y)return false;
 		}
-		//add here checking trought the list/ array of blocked grid spaces
+		//add here checking trought the ArrayList of blocked grid spaces
 		return true;
 	}
 	
@@ -149,18 +149,18 @@ class Player{
 		x=sx;
 		y=sy;
 		console.print(name + "has moved to square[" + x + "," + y + "]");
-		currentAction="";
 		tm.EndTurn();
 	}
 	
 	public void PassGridClicked(int gx, int gy){
 		switch(currentAction){
-			case "move": if(checkIfSquareAdjasent(gx,gy) && checkIfSquareEmpty(gx,gy))ExecuteMove(gx, gy);
-			case "atk": {
-				for(int i=0; i<currentEnemiesInGame; i++){
-					if(enemy[i].x == gx && enemy[i].y == gy){
-						console.print(name + "damaged enemy[" + i + "] for " + basicAttackDamage);
-						enemy[i].Damage(basicAttackDamage);
+			case 'm': if(checkIfSquareAdjasent(gx,gy) && checkIfSquareEmpty(gx,gy))ExecuteMove(gx, gy);
+			case 'a': {
+				for(Enemy e : enemy){
+					if(e.x == gx && e.y == gy){
+						console.print(name + " damaged enemy for " + basicAttackDamage);
+						e.Damage(basicAttackDamage);
+						tm.EndTurn();
 					}
 				}
 			}
@@ -171,8 +171,8 @@ class Player{
 	void draw(){
 		image(sprite, x*gridSize, y*gridSize);
 		switch (currentAction){
-			case "move": drawMove(); break;
-			case "atk": drawAttack(); break;
+			case 'm': drawMove(); break;
+			case 'a': drawAttack(); break;
 		}
 	}
 }

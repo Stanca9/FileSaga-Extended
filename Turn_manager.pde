@@ -1,67 +1,46 @@
 class TurnManager {
 	private int playerTurnCtr = 0, enemyTurnCtr=0;
-	private boolean isEnemyTurn=false;
-	private boolean turnResolved=false;
+	private boolean isPlayerTurn=true;
 	
 	TurnManager(){
 		console.print("Turn manager connected");
-		console.print("-Player turns-");
 	}
 	
 	void begin(){
-		console.print("It is now "+player[playerTurnCtr].name+"'s turn");
+		console.print("It is now "+player.get(playerTurnCtr).name+"'s turn");
 	}
 	
-	void ButtonEvent(String input){
-		if(!isEnemyTurn){
-			switch(input){
-				case "a1": player[playerTurnCtr].Do("act1"); break;
-				case "a2": player[playerTurnCtr].Do("act2"); break;
-				case "a3": player[playerTurnCtr].Do("act3"); break;
-				case "m":  player[playerTurnCtr].Do("move"); break;
-				case "end":EndTurn(); break;
-				case "atk":player[playerTurnCtr].Do("atk"); break;
-				case "the button that I didn't figgure out yet": break;
-				default: println("invallid event [" + input + "]");
-			}
-		}
+	void ButtonEvent(char input){
+		if(isPlayerTurn)
+			player.get(playerTurnCtr).Do(input);
 	}
 	
 	void EndTurn(){
-		turnResolved=true;
-	}
-	
-	void PassGridClicked(int gx, int gy){
-		if(!isEnemyTurn){
-			player[playerTurnCtr].PassGridClicked(gx, gy);
+		if(isPlayerTurn){
+			player.get(playerTurnCtr).ClearCurrentAction();
+			playerTurnCtr++;
+			if(playerTurnCtr==player.size()){
+				playerTurnCtr=0;
+				isPlayerTurn=false;
+				console.print("-Enemy turns-");
+				enemy.get(enemyTurnCtr).StartTurn();
+			}
+			else console.print("It is now "+player.get(playerTurnCtr).name+"'s turn");
+		}
+		else{
+			enemyTurnCtr++;
+			if(enemyTurnCtr==enemy.size()){
+				enemyTurnCtr=0;
+				isPlayerTurn=true;
+			}
+			else
+				enemy.get(enemyTurnCtr).StartTurn();
 		}
 	}
 	
-	void draw(){
-		if(turnResolved){
-			if(!isEnemyTurn){
-				playerTurnCtr++;
-				if(playerTurnCtr>=currentPlayersInGame){
-					playerTurnCtr=0;
-					isEnemyTurn=true;
-					console.print("-Enemy turns-");
-					turnResolved=false;
-					enemy[enemyTurnCtr].StartTurn();
-					}
-				else console.print("It is now "+player[playerTurnCtr].name+"'s turn");
-			}
-			else{
-				enemyTurnCtr++;
-				if(enemyTurnCtr>=currentEnemiesInGame){
-					enemyTurnCtr=0;
-					isEnemyTurn=false;
-					console.print("-Player turns-");
-				}
-				else
-					enemy[enemyTurnCtr].StartTurn();
-				turnResolved=false;
-				
-			}
+	void PassGridClicked(int gx, int gy){
+		if(isPlayerTurn){
+			player.get(playerTurnCtr).PassGridClicked(gx, gy);
 		}
 	}
 }

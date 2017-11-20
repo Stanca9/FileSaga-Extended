@@ -29,3 +29,6 @@ Story:
 	
 Add multiplier
 Add twitch integration
+
+don't allow more than 15 concurrent players
+if(maxPlayersConnected>15)println("ERROR maxPlayersConnected can not be larger than 15");

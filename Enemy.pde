@@ -1,16 +1,15 @@
 class Enemy{
-	protected int health=1, x=24, y, type, id;	
+	protected int health=1, x=24, y;
+	protected boolean isDead=false;
 	private PImage sprite;
 	
-	Enemy(int idIn){
-		id = idIn;
-		
+	Enemy(){
 		int r=floor(random(0,14));
-		if(currentEnemiesInGame>0){
+		if(enemy.size()>1){
 			while(true){
 				boolean found=false;
-				for(int i=0; i<currentEnemiesInGame; i++){
-					if(r==enemy[i].y){
+				for(Enemy e : enemy){
+					if(r==e.y){
 						found=true; break;
 					}
 				}
@@ -22,7 +21,6 @@ class Enemy{
 			}
 		}
 		y=r;
-		currentEnemiesInGame++;
 		sprite=loadImage("enemy.png");
 		//switch of type to set the health
 	}
@@ -33,11 +31,11 @@ class Enemy{
 	
 	void Damage(int amount){
 		health-=amount;
-		if(health<=0){EnemyDie(id);console.print("enemy " + id + " died");}
+		if(health<=0)isDead=true;
 	}
 	
 	void StartTurn(){
-		console.print("enemy "+id+" moved");
+		console.print("enemy moved");
 		x--;
 		tm.EndTurn();
 	}

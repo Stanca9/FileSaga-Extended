@@ -1,25 +1,18 @@
 class Button {
 	
 	protected int x,y,w,h;
-	protected String fun;
-	public boolean displayGizmo=false;
+	protected String function;
 	
-	Button(int xIn, int yIn, int widthIn, int heightIn, String functionalityIn){
-		x=xIn;
-		y=yIn;
-		w=widthIn;
-		h=heightIn;
-		fun=functionalityIn;
+	Button(int tempx, int tempy, int tempwidth, int tenpheight, String tempfunction){
+		x=tempx;
+		y=tempy;
+		w=tempwidth;
+		h=tenpheight;
+		function=tempfunction;
 	}
 	
 	void mouseCliked(){		
 		console.print("button clicked");
-	}
-	
-	void draw(){
-		if(displayGizmo){
-			fill(#FEAE0F); rect(x*gridSize, y*gridSize, gridSize, gridSize);
-		}
 	}
 }
 
