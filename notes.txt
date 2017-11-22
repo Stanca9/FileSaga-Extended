@@ -3,24 +3,26 @@ Enemy type determined by file extensions
 Turn based game on a grid
 
 Game modes:
-	Easy:
-	Medium:
+	Normal: wave front advances at the same rate as you
 	Hard: wave front constantly advances
 
 Classes:
 	Bat (.bat)
 		super: download RAM (increases processing power recharge rate)
 		robocopy (move other players)
+		ability: sort
 	Doc (.doc)
 		super: load autosave (revive a dead player)
+		ability: comic sans cannon
 	Tex (.txt)
 		super: save as (change class for two rounds)
+		ability: text wrap (pasive)
 	Jason (.json)
-		super:
+		super: I'm feeling lucky (google searches enemy weakness)
+		ability: minions
 	Zip (.zip)
 		super: file compression (debuffs all enemies)
-	Ico (.ico)
-		super: (makes all players icons the same to camouflage them for the next few rounds/next level)
+		ability:
 		
 Story:
 	Virus detected at path C://

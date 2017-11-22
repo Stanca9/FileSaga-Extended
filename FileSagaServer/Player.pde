@@ -1,7 +1,7 @@
 class Player{
 	private PImage sprite, currentScreen, highlightSprite;
-	private int basicAttackRange=20, basicAttackDamage=1;
-	protected int x=0, y=-1, health=22;
+	//private int basicAttackRange=20, basicAttackDamage=1;
+	protected int x=0, y=-1;
 	protected String name, extention;
 	private char currentAction;
 	
@@ -47,7 +47,6 @@ class Player{
 	
 	public void Do(char c){
 		currentAction=c;
-		console.print(name + " is doing something");
 	}
 	
 	private int calculateDistanceToPoint(int xx, int yy){
@@ -153,6 +152,10 @@ class Player{
 	}
 	
 	public void PassGridClicked(int gx, int gy){
+		if(gx==x&&gy==y){
+			Do('m');
+		}
+		else
 		switch(currentAction){
 			case 'm': if(checkIfSquareAdjasent(gx,gy) && checkIfSquareEmpty(gx,gy))ExecuteMove(gx, gy);
 			case 'a': {

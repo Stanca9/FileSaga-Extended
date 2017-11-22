@@ -1,21 +1,3 @@
-class Button {
-	
-	protected int x,y,w,h;
-	protected String function;
-	
-	Button(int tempx, int tempy, int tempwidth, int tenpheight, String tempfunction){
-		x=tempx;
-		y=tempy;
-		w=tempwidth;
-		h=tenpheight;
-		function=tempfunction;
-	}
-	
-	void mouseCliked(){		
-		console.print("button clicked");
-	}
-}
-
 class GridButton{
 	protected int x,y;
 	
