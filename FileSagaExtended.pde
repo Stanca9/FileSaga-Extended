@@ -1,20 +1,32 @@
 import processing.net.*;
 
-int  gridSize=40;//size in pixels of a grid square
+//constants
+String serverIP = "192.168.1.98", name="Gicu";
+byte gridSize = 40;//size in pixels of a grid square
 color bgColor=#000000, lineColor=#FFFFFF;
-PVector position = new PVector(0,-1);
+char cls='d';
+
+//variables
+byte x, y;//positions of the player on the grid
 PImage cursorImage, sprite, highlightSprite;//the sprite of the cursor, the player itself, the sprite that gets overlayed over the tiles you can move onto, attack etc
 PFont myFont;
-String name="gicu";
 ArrayList<Player> otherPlayer;
 ArrayList<Enemy> enemy;
-ArrayList<BlockedTile> blockedTile;
 Console console;
-char currentAction, cls;
+char currentAction;
 boolean isConnectedToServer=false;
-
 Client myClient;
 String dataIn;
+
+void readData(){
+	while(myClient.available()<2);
+	dataIn="";
+	while(dataIn.indexOf('\n')==-1){
+		dataIn += myClient.readString();//reads stream until encounters a newline charachter
+	}
+	dataIn = dataIn.substring(0, dataIn.indexOf('\n'));
+	println(dataIn);
+}
 
 void setup(){
 	size(1001, 751,P2D);//size of the window
@@ -26,25 +38,20 @@ void setup(){
 	
 	otherPlayer = new ArrayList<Player>();
 	enemy = new ArrayList<Enemy>();
-	blockedTile = new ArrayList<BlockedTile>();
+	//blockedTile = new ArrayList<BlockedTile>();
 	
-	myClient = new Client(this, "127.0.0.1", 5204);
-	for(int i=0; i<name.length(); i++)
-		myClient.write(name.charAt(i));
-	myClient.write(',');
-	myClient.write(cls);
-	dataIn = myClient.readStringUntil('\n');
-	
-	
-	//set sprite based on class
-	//get y position from server
+	myClient = new Client(this, serverIP, 5204);
+	myClient.write(name+','+cls+'\n');//////////////////////////////////
+	readData();
+	y = byte(dataIn.charAt(0));
 	//print to console what server you joined
 	
+	//switch of class to set the sprite
+	sprite = loadImage("doc.png");
 	
-	console = new Console(width/2, height-10, 100);
+	
+	console = new Console(width/2, height-10, 100, 11);
 	//make a function to handle player joining
-	
-	//connect to server
 }
 
 void EndTurn(){
@@ -63,22 +70,22 @@ void drawBg(){//draws the background grid
 
 int calculateDistanceToPoint(int xx, int yy){
 		int dist =0;
-		if(position.x<=xx){
-			while(position.x!=xx){xx--; dist++;}
-			if(position.y<=yy){
-				while(position.y!=yy){yy--; dist++;}
+		if(x<=xx){
+			while(x!=xx){xx--; dist++;}
+			if(y<=yy){
+				while(y!=yy){yy--; dist++;}
 			}
 			else{
-				while(position.y!=yy){yy++; dist++;}
+				while(y!=yy){yy++; dist++;}
 			}
 		}
 		else{
-			while(position.x!=xx){xx++; dist++;}
-			if(position.y<=yy){
-				while(position.y!=yy){yy--; dist++;}
+			while(x!=xx){xx++; dist++;}
+			if(y<=yy){
+				while(y!=yy){yy--; dist++;}
 			}
 			else{
-				while(position.y!=yy){yy++; dist++;}
+				while(y!=yy){yy++; dist++;}
 			}
 		}
 		return dist;
@@ -109,49 +116,52 @@ boolean checkIfSquareAdjasent(int xx, int yy){//returns true if that square is w
 		return false;
 	}
 	boolean check = true;
-	check = check &&  (xx<=position.x+2 && xx>=position.x-2 && yy<=position.y+2 && yy>=position.y-2);
-	check = check && !(xx==position.x   && yy==position.y);
-	check = check && !(xx==position.x-2 &&yy!=position.y);
-	check = check && !(xx==position.x+2 &&yy!=position.y);
-	check = check && !(xx!=position.x   &&yy==position.y-2);
-	check = check && !(xx!=position.x   &&yy==position.y+2);	
+	check = check &&  (xx<=x+2 && xx>=x-2 && yy<=y+2 && yy>=y-2);
+	check = check && !(xx==x   && yy==y);
+	check = check && !(xx==x-2 &&yy!=y);
+	check = check && !(xx==x+2 &&yy!=y);
+	check = check && !(xx!=x   &&yy==y-2);
+	check = check && !(xx!=x   &&yy==y+2);	
 	return check;
 	}
 
 private void drawMove(){//wip
 		boolean cangoUp, cangoDown, cangoLeft, cangoRight;
-		cangoUp = checkIfSquareEmpty(position.x,position.y-1);
-		cangoDown = checkIfSquareEmpty(position.x,position.y+1);
-		cangoLeft = checkIfSquareEmpty(position.x-1,position.y);
-		cangoRight =checkIfSquareEmpty(position.x+1,position.y);
+		cangoUp = checkIfSquareEmpty(x,y-1);
+		cangoDown = checkIfSquareEmpty(x,y+1);
+		cangoLeft = checkIfSquareEmpty(x-1,y);
+		cangoRight =checkIfSquareEmpty(x+1,y);
 		if(cangoRight){
-			image(highlightSprite, (position.x+1)*40,position.y*40);
-			if(checkIfSquareEmpty(position.x+2,position.y))image(highlightSprite, (position.x+2)*40,position.y*40);
+			image(highlightSprite, (x+1)*40,y*40);
+			if(checkIfSquareEmpty(x+2,y))image(highlightSprite, (x+2)*40,y*40);
 		}
 		if(cangoDown){
-			image(highlightSprite, position.x*40,(position.y+1)*40);
-			if(checkIfSquareEmpty(position.x,position.y+2))image(highlightSprite, position.x*40,(position.y+2)*40);
+			image(highlightSprite, x*40,(y+1)*40);
+			if(checkIfSquareEmpty(x,y+2))image(highlightSprite, x*40,(y+2)*40);
 		}
 		if(cangoLeft){
-			image(highlightSprite, (position.x-1)*40,position.y*40);
-			if(checkIfSquareEmpty(position.x-2,position.y))image(highlightSprite, (position.x-2)*40,position.y*40);
+			image(highlightSprite, (x-1)*40,y*40);
+			if(checkIfSquareEmpty(x-2,y))image(highlightSprite, (x-2)*40,y*40);
 		}
 		if(cangoUp){
-			image(highlightSprite, position.x*40,(position.y-1)*40);
-			if(checkIfSquareEmpty(position.x,position.y-2))image(highlightSprite, position.x*40,(position.y-2)*40);
+			image(highlightSprite, x*40,(y-1)*40);
+			if(checkIfSquareEmpty(x,y-2))image(highlightSprite, x*40,(y-2)*40);
 		}
-		if(checkIfSquareEmpty(position.x+1,position.y+1)&&(cangoDown || cangoRight))image(highlightSprite, (position.x+1)*40,(position.y+1)*40);
-		if(checkIfSquareEmpty(position.x+1,position.y-1)&&(cangoUp || cangoRight))image(highlightSprite, (position.x+1)*40,(position.y-1)*40);
-		if(checkIfSquareEmpty(position.x-1,position.y+1)&&(cangoDown || cangoLeft))image(highlightSprite, (position.x-1)*40,(position.y+1)*40);
-		if(checkIfSquareEmpty(position.x-1,position.y-1)&&(cangoUp || cangoLeft))image(highlightSprite, (position.x-1)*40,(position.y-1)*40);
+		if(checkIfSquareEmpty(x+1,y+1)&&(cangoDown || cangoRight))image(highlightSprite, (x+1)*40,(y+1)*40);
+		if(checkIfSquareEmpty(x+1,y-1)&&(cangoUp || cangoRight))image(highlightSprite, (x+1)*40,(y-1)*40);
+		if(checkIfSquareEmpty(x-1,y+1)&&(cangoDown || cangoLeft))image(highlightSprite, (x-1)*40,(y+1)*40);
+		if(checkIfSquareEmpty(x-1,y-1)&&(cangoUp || cangoLeft))image(highlightSprite, (x-1)*40,(y-1)*40);
 	}
 
 void draw(){
 	drawBg();
 	console.draw();
-	image(sprite, position.x*gridSize,position.y*gridSize);//displays this player
-	for(Enemy e : enemy) e.draw();//displays each enemy
-	for(BlockedTile b : blockedTile) b.draw();
+	image(sprite, x*gridSize,y*gridSize);//displays this player
+	String cout; 
+	cout = "x=" + char(x) + " y=" + char(y);
+	console.print(cout);
+	//for(Enemy e : enemy) e.draw();//displays each enemy
+	//for(BlockedTile b : blockedTile) b.draw();
 }
 
 void mouseClicked(){
@@ -163,12 +173,14 @@ void mouseClicked(){
 		else
 		switch(currentAction){
 			case 'm': 
-				if(checkIfSquareAdjasent(mo.x,mo.y) && checkIfSquareEmpty(mo.x,mo.y)){
-					position.set(mo);
-					console.print(name + "has moved to square[" + position.x + "," + position.y + "]");
+				if(checkIfSquareAdjasent(floor(mo.x),floor(mo.y)) && checkIfSquareEmpty(floor(mo.x),floor(mo.y))){
+					x=byte(floor(mo.x)); 
+					y=byte(floor(mo.y));
+					console.print(name + "has moved to square[" + x + "," + y + "]");
 					EndTurn();
 				}
 				break;
+			/*
 			case 'a': {
 				for(Enemy e : enemy){
 					if(e.x == mo.x && e.y == mo.y){
@@ -178,6 +190,7 @@ void mouseClicked(){
 					}
 				}
 			}
+			*/
 		}
 	}
 }

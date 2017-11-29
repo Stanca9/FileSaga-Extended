@@ -1,13 +1,15 @@
 class Console{
 	
-	int x, y, textCol=#FFFFFF, maxWidth;
-	private int lineNo=0;
+	float xRatio, yRatio;
+	int textCol=#FFFFFF, maxWidth;
+	private int lineNo=0, maxLineNo;
 	String content="";
 	
-	Console(int xIn, int yIn, int maxIn){
-		y=yIn;
-		x=xIn;
-		maxWidth=maxIn;
+	Console(float xIn, float yIn, int maxWidthIn, int maxLineNoIn){
+		xRatio=xIn;
+		yRatio=yIn;
+		maxWidth = maxWidthIn;
+		maxLineNo = maxLineNoIn;
 	}
 	
 	void print(String message){
@@ -16,7 +18,7 @@ class Console{
 			return;
 		}
 		lineNo++;
-		if(lineNo>11){
+		if(lineNo>maxLineNo){
 			int search=0;
 			while(content.charAt(search)!='\n') search++;
 			content = content.substring(search+1);
@@ -29,7 +31,8 @@ class Console{
 	
 	void draw(){
 		fill(textCol);
+		textSize(12);
 		textAlign(CENTER, BOTTOM);
-		text(content, x, y);
+		text(content, width*xRatio, height*yRatio);
 	}
 }
