@@ -1,6 +1,6 @@
 class SingleplayerScene {
 	
-	void update(){
+	void draw(){
 		background(0);
 	}
 }

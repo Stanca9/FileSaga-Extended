@@ -1,6 +1,6 @@
 class MultiplayerScene {
 	
-	void update(){
+	void draw(){
 		background(0);
 	}
 }

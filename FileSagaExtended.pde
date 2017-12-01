@@ -6,12 +6,12 @@ SceneManager sm;
 void setup(){
 	sm = new SceneManager();
 	size(1001, 751,P2D);//size of the window
-	noSmooth();//turns off anti-aliasing
+	//noSmooth();//turns off anti-aliasing
 	cursorImage = loadImage("cursor.png");//sets the cursor imag
 	cursor(cursorImage,0,0);
 	//cursor(CROSS);
 	while(!focused){}//waits until the player is clicked in the window
-	myFont = createFont("pcsenior.ttf", 100);//sets the font
+	myFont = createFont("invasion2000.TTF", 70);//sets the font
 	textFont(myFont);
 	
 	sm.loadScene("menu");//first loads the menu scene
@@ -19,7 +19,7 @@ void setup(){
 }
 
 void draw(){
-	sm.update();//lets the scene manager display
+	sm.draw();//lets the scene manager display
 }
 
 class SceneManager {
@@ -54,12 +54,12 @@ class SceneManager {
 		}	
 	}
 	
-	void update(){//displays the current scene
+	void draw(){//displays the current scene
 		switch(currentScene){
-			case "menu": menu.update(); break;
-			case "settings": settings.update(); break;
-			case "multiplayer": mp.update(); break;
-			case "singleplayer": sp.update(); break;
+			case "menu": menu.draw(); break;
+			case "settings": settings.draw(); break;
+			case "multiplayer": mp.draw(); break;
+			case "singleplayer": sp.draw(); break;
 		}
 	}
 }
