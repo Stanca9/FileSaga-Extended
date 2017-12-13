@@ -4,11 +4,13 @@ class SettingsScene {
 	*/
 	UIslider musicVolumeSlider,sfxVolumeSlider;
 	UIbutton backButton;
+	UItick testTick;
 	
 	SettingsScene(){
 		musicVolumeSlider = new UIslider(height/2, 10, "Music");
 		sfxVolumeSlider = new UIslider(height/2+100,10, "SFX");
-		backButton = new UIbutton(width/2, height-40, 100, 40, "Back", 25);
+		backButton = new UIbutton(width/2, height-40, 120, 50, "Back");
+		testTick = new UItick(height/2+170, "Test checkbox");
 	}
 	
 	void draw(){
@@ -16,7 +18,7 @@ class SettingsScene {
 		
 		fill(#FFFFFF);
 		textAlign(CENTER, CENTER);
-		textSize(60);
+		textFont(font2);
 		text("Settings", width/2, 150);
 		
 		if(mousePressed){
@@ -26,5 +28,6 @@ class SettingsScene {
 		musicVolumeSlider.draw();
 		sfxVolumeSlider.draw();
 		backButton.draw();
+		testTick.draw();
 	}
 }

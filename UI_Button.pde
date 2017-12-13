@@ -1,18 +1,22 @@
 class UIbutton {
 	//A button on the ui. You can make it do something when you click it.
 	
-	protected float x,y,w,h,txtSize;
+	protected boolean isClicked;
+	private boolean mousePressedLastFrame=true;
+	
+	protected float x,y,w,h;
 	protected String txt;
-	private PImage sprite;
+	private PImage sprite, highlightedSprite;
 	private boolean spriteMode;
 	
-	UIbutton(float tempx, float tempy, float tempw, float temph, String tempTxt, float tempTxtSize){
+	float textOffset = 2;//modify to raise the text inside the button box
+	
+	UIbutton(float tempx, float tempy, float tempw, float temph, String tempTxt){
 		x = tempx;
 		y = tempy;
 		w = tempw;
 		h = temph;
 		txt = tempTxt;
-		txtSize = tempTxtSize;
 		spriteMode = false;
 	}
 	
@@ -28,6 +32,15 @@ class UIbutton {
 		x = tempx;
 		y = tempy;
 		sprite = tempSprite;
+		highlightedSprite = sprite;
+		spriteMode = true;
+	}
+	
+	UIbutton(float tempx, float tempy, PImage tempSprite, PImage tempHighlightedSprite){
+		x = tempx;
+		y = tempy;
+		sprite = tempSprite;
+		highlightedSprite = tempHighlightedSprite;
 		spriteMode = true;
 	}
 	
@@ -45,19 +58,26 @@ class UIbutton {
 	}
 	
 	void draw(){
+		if(mouseIsHovering() && mousePressed && !mousePressedLastFrame) isClicked=true;
+		else isClicked=false;
+		
 		if(spriteMode){//if the button is a image button
 			imageMode(CENTER);
-			image(sprite,x,y);
+			if(mouseIsHovering()){
+				image(highlightedSprite,x,y);
+			}
+			else{
+				image(sprite,x,y);
+			}
 		}
 		else{//if the button is a text button
 			stroke(#FFFFFF);
 			fill(0);
 			rectMode(CENTER);
 			textAlign(CENTER, CENTER);
-			textSize(txtSize);
 			strokeWeight(4);
+			textFont(font075);
 			
-			float textOffset = 5;
 			map(textOffset, 0, 80, 0, h);
 			
 			if(!mouseIsHovering()){
@@ -71,5 +91,8 @@ class UIbutton {
 				text(txt,x,y-textOffset);
 			}
 		}
+		
+		mousePressedLastFrame = mousePressed;
 	}
+
 }

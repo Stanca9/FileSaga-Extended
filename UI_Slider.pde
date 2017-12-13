@@ -1,11 +1,10 @@
 class UIslider {
-	//A button on the ui. You can make it do something when you click it.
 	
-	protected int segments, value=3;
-	protected float x,y,w,h,txtSize;
+	protected int segments, value;
+	protected float x,y,w,h;
 	protected String txt;
 	
-	private boolean mousePressedLastFrame;
+	private boolean mousePressedLastFrame=true;
 	
 	UIslider(float tempy, int tempSegments, String tempTxt){
 		x = width/2;
@@ -14,27 +13,16 @@ class UIslider {
 		h = 40;
 		segments = tempSegments;
 		txt = tempTxt;
-		txtSize = 35;
 		value = segments;
 	}
 	
-	UIslider(float tempx, float tempy, float tempw, float temph, int tempSegments, String tempTxt, float tempTxtSize){
+	UIslider(float tempx, float tempy, float tempw, float temph, int tempSegments, String tempTxt){
 		x = tempx;
 		y = tempy;
 		w = tempw;
 		h = temph;
 		segments = tempSegments;
 		txt = tempTxt;
-		txtSize = tempTxtSize;
-		value = segments;
-	}
-	
-	UIslider(float tempx, float tempy, float tempw, float temph, int tempSegments){
-		x = tempx;
-		y = tempy;
-		w = tempw;
-		h = temph;
-		segments = tempSegments;
 		value = segments;
 	}
 	
@@ -61,8 +49,8 @@ class UIslider {
 		fill(0);
 		rectMode(CENTER);
 		textAlign(CENTER, BOTTOM);
-		textSize(txtSize);
 		strokeWeight(4);
+		textFont(font1);
 		
 		rect(x,y,w,h);
 		for(int i=1; i< segments; i++){

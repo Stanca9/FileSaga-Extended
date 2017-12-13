@@ -1,18 +1,22 @@
 PImage cursorImage;
-PFont myFont;
+String fontPath = "lunchds.ttf";
+PFont font025, font05, font075, font1, font2;
 
 SceneManager sm;
 
 void setup(){
 	sm = new SceneManager();
-	size(1001, 751,P2D);//size of the window
-	//noSmooth();//turns off anti-aliasing
+	size(1010, 630,P2D);//size of the window
+	noSmooth();//turns off anti-aliasing
 	cursorImage = loadImage("cursor.png");//sets the cursor imag
 	cursor(cursorImage,0,0);
 	//cursor(CROSS);
 	while(!focused){}//waits until the player is clicked in the window
-	myFont = createFont("invasion2000.TTF", 70);//sets the font
-	textFont(myFont);
+	font025 = createFont(fontPath, 10);
+	font05 = createFont(fontPath, 20);
+	font075 = createFont(fontPath, 30);
+	font1 = createFont(fontPath, 40);
+	font2 = createFont(fontPath, 80);
 	
 	sm.loadScene("menu");//first loads the menu scene
 	///We migth wanna change this so some fancy animation then go in the menu
@@ -23,7 +27,7 @@ void draw(){
 }
 
 class SceneManager {
-	private String[] scenes = {"menu", "settings", "singleplayer", "multiplayer"};//list of allowed scenes
+	private String[] scenes = {"menu", "settings", "singleplayer", "multiplayer", "credits"};//list of allowed scenes
 	private String currentScene;//string to store teh current scene that is displaying
 	
 	//all the scene objects
@@ -31,6 +35,7 @@ class SceneManager {
 	private SingleplayerScene sp;
 	private MultiplayerScene mp;
 	private SettingsScene settings;
+	private CreditsScene credits;
 	
 	//initialise eache scene object here
 	SceneManager(){
@@ -38,6 +43,7 @@ class SceneManager {
 		sp = new SingleplayerScene();
 		mp = new MultiplayerScene();
 		settings = new SettingsScene();
+		credits = new CreditsScene();
 	}
 	
 	void loadScene(String sceneToLoad){//changes the current scene
@@ -60,6 +66,7 @@ class SceneManager {
 			case "settings": settings.draw(); break;
 			case "multiplayer": mp.draw(); break;
 			case "singleplayer": sp.draw(); break;
+			case "credits": credits.draw(); break;
 		}
 	}
 }
