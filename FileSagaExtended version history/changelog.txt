@@ -1,0 +1,73 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+# Note: if you wish to run any of the previous versions these need to be copied in a folder named after the name of the main file (generally "fileTree" or "FileSagaExtended")
+
+# Note: The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+
+# [Before starting the changelog]
+
+## [Unreleased]
+
+## [1.0.0] - 2017-??-??
+### Added
+- Grid generated with squares (low rez)
+- Dummy UI
+- Sample text
+
+## [1.0.1] - 2017-??-??
+### Added
+- "Player" class with "display" and "move" functions
+
+## [1.0.2] - 2017-??-??
+### Added
+- Classes: console, turn manager, enemy, button
+- Support for multiple players (on the same computer / kind splitscreen)
+- Enemies with a basic AI (going forward)
+- Ability to damage enemies in an attack radius
+
+## [1.0.3] - 2017-??-??
+### Started over
+- Switched to a network configuration with a separate server and client software
+
+## [1.0.4]  - 2017-??-??
+### Went back to previous singeplayer system
+### Added
+- New scene system that manages display and calculations
+- Credits scene. elements: back button, text{"credits", placeholder text for the name of the devs}
+- Menu scene. elements: main title, buttons{SP, MP, settings, credits, exit}
+- Multiplayer scene. just sends you back to the menu for now
+- Settings scene. elements: sliders{sfx volume, music volume}, back button, text "settings"
+- Singleplayer scene. elements: background made from squares, placeholder UI, console
+- UIbutton class
+	> initialise with x,y,width,height valus and text 
+	> needs to be manually made to do something if it's pressed bool is high
+- UIslider class
+	> initialise with x,y,width,hight,number of segments values and text
+	> manages increaseing it's vaule as long as you draw it
+	> use it by accesing its value variable
+- Fancy fonts
+
+## [1.0.5] - 2017-??-??
+### Added
+- slight UI improovements
+- UItick class
+- test tick to settings scene
+
+# [Started the changelog]
+
+# Upcomming features
+- Squad selection scene (select and arrange your troops)
+- Camera is able to move around instead of being fixed over a fixed size battlefield (not zoomable, maybe just two views)
+- Scalable battlefield
+- Classes for each unit {int x,y,health,maxHealth}
+- Camera move speed vaies on how close is your mouse to the endge (if in a  certain distance)
+- Classes for each type of enemy
+
+## [1.0.6] - 2017.12.17
+### Added
+- Camera class with three modes: drag, edge and key
+	drag for dragging the camera around with the mouse
+	edge to move camera when mouse is within a distance from the edges (faster if closer)
+	key to use wasd to move the camera
+- Data folder to put all the the sprites and fonts in

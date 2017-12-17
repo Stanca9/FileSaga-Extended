@@ -1,0 +1,35 @@
+int gridSize=40;//size in pixels of a grid square
+color bgColor=#000000, lineColor=#FFFFFF;
+PImage cursorImage, UIimage;
+int mX=0, mY=0;//mouse coordinates on the grid
+PFont myFont;
+Player player1;//initialise player object
+Console console;
+
+void setup(){
+	size(1001, 751,P2D);//size of the window
+	myFont = createFont("pcsenior.ttf", 8);
+	textFont(myFont);
+	player1 = new Player(3,5,"doc");
+	while(!focused){}//wait until the player clisks in the window
+	//UIimage = loadImage("action bar.png");
+	cursorImage = loadImage("cursor.png");//sets the cursor imagesize
+	cursor(cursorImage);//
+	console = new Console(850, 740, 30);
+}
+
+void drawBg(){//draws the background grid
+  background(0);
+  fill(bgColor); stroke(lineColor);
+  for(int i=0; i<25; i++){
+	  for(int j=0; j<15; j++){
+		  rect(i*gridSize, j*gridSize, gridSize, gridSize);
+	  }
+  }
+}
+
+void draw(){
+	drawBg();
+	player1.draw();
+	console.Show();
+}

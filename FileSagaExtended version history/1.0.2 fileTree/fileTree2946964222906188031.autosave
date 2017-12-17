@@ -1,0 +1,34 @@
+int gridSize=40;
+color bgColor=#000000, lineColor=#FFFFFF;
+PImage cursorImage;
+PImage enemyImage;
+int mX, mY;
+
+//Player p;
+
+void settings(){
+	size(800,800);
+}
+
+void setup(){
+	while(!focused){}
+	cursorImage = loadImage("cursor.png");
+	cursor(cursorImage);
+	enemyImage = loadImage("enemy 1.png");
+}
+
+void drawBg(){
+  fill(bgColor); stroke(lineColor);
+  for(int i=0; i<width/gridSize; i++){
+	  for(int j=0; j<height/gridSize; j++){
+		  rect(i*gridSize, j*gridSize, gridSize, gridSize);
+	  }
+  }
+}
+
+void draw(){
+	drawBg();
+	//myPlayer.display();
+	//p.move();
+	
+}
